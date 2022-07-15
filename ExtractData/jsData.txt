@@ -1,0 +1,31 @@
+var maxPage = 25; 
+var activityType = "Ride"; 
+var p = 1;
+var done = 0;
+var url;
+var nw = window.open("workouts.html");
+nw.document.write("[");
+while (p <= maxPage) {
+    url = "https://www.strava.com/athlete/training_activities" +
+        "?keywords=&activity_type=" + activityType + "&workout_type=&commute=&private_activities=" +
+        "&trainer=&gear=&new_activity_only=false" +
+        "&page=" + p + "&per_page=20";
+    jQuery.ajax({
+        url: url,
+        dataType: "json",
+        method: "GET",
+        success: function(data, textStatus, jqXHR) {
+            for (i in data.models) {
+                nw.document.write(JSON.stringify(data.models[i]) + "," + "");
+            }
+            done++;
+            if (done >= maxPage) {
+                nw.document.write("]");
+                nw.document.close();
+            }
+            window.open("workouts.html");
+        }
+    });
+    p++;
+};
+window.open("workouts.html");
